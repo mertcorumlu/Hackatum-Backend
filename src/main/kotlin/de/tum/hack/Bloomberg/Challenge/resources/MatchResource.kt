@@ -13,7 +13,7 @@ class MatchResource(
     val matchService: MatchService
 ) {
 
-    @GetMapping("/")
+    @GetMapping
     fun filterMatches(
         @RequestParam("userId", required = false) userId: Int? = null,
         @RequestParam("cardId", required = false) cardId: String? = null

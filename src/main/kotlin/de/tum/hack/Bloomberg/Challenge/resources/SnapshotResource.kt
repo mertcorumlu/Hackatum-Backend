@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/snapshot")
 class SnapshotResource(val orderService: OrderService) {
 
-    @GetMapping("/")
+    @GetMapping
     fun filterSnapshot(
         @RequestParam("side", required = false) side: Side? = null,
         @RequestParam("userId", required = false) userId: Int? = null,

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/cards")
 class CardsResource(val cardsService: CardsService) {
 
-    @GetMapping("")
+    @GetMapping
     fun getCards(
         @RequestParam q: String?,
         @RequestParam sortBy: String?
