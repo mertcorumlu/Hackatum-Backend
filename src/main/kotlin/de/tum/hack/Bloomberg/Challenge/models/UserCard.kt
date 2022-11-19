@@ -13,10 +13,11 @@ data class UserCard (
     var id: Int? = null,
 
     @ManyToOne
-    var user: User,
+    @JsonIgnore
+    var user: User? = null,
 
     @ManyToOne
-    @JoinColumn(name = "card_id", referencedColumnName = "card_id")
+    @JoinColumn(name = "card_id", referencedColumnName = "card_id", columnDefinition = "TEXT")
     var card: Card,
 
     @Column(name = "count", nullable = false)

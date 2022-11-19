@@ -12,7 +12,7 @@ data class MasterOrder (
     var id: Int? = null,
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "card_id", nullable = false, referencedColumnName = "card_id")
+    @JoinColumn(name = "card_id", nullable = false, referencedColumnName = "card_id", columnDefinition = "TEXT")
     var card: Card,
 
     @Column(name = "quantity", nullable = false)
