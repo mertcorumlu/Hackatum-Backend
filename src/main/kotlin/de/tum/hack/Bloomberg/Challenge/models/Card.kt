@@ -1,6 +1,7 @@
 package de.tum.hack.Bloomberg.Challenge.models
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import java.io.Serializable
 import javax.persistence.*
 
 @Entity
@@ -26,4 +27,4 @@ data class Card (
     @JsonIgnore
     @OneToMany(mappedBy = "card")
     var masterOrders: List<MasterOrder> = emptyList()
-)
+): Serializable

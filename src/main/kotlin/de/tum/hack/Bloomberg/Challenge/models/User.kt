@@ -1,5 +1,6 @@
 package de.tum.hack.Bloomberg.Challenge.models
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import java.time.LocalDateTime
 import javax.persistence.*
 
@@ -21,5 +22,9 @@ data class User (
     var registered: LocalDateTime,
 
     @Column(name = "balance", nullable = false)
-    var balance: Double
+    var balance: Double,
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    var cards: List<UserCard> = emptyList()
 )

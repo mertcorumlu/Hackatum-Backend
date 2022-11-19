@@ -7,6 +7,7 @@ import javax.persistence.*
 @Table(name = "child_orders")
 data class ChildOrder (
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     var id: Int? = null,
 

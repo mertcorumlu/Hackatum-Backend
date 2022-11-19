@@ -6,6 +6,7 @@ import javax.persistence.*
 @Table(name = "snapshot_orders")
 data class SnapshotOrder (
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     var id: Int? = null,
 

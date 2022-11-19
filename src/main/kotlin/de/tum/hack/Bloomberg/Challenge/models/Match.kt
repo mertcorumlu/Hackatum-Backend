@@ -6,6 +6,7 @@ import javax.persistence.*
 @Table(name = "matches")
 data class Match (
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     var id: Int? = null,
 
