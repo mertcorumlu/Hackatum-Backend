@@ -26,6 +26,12 @@ class UserResource(val userService: UserService) {
         @RequestParam("sortBy") sortBy: SortTypes
     ) = userService.sortCards(userId, sortBy)
 
+    @GetMapping("/{user_id}/card/{card_id}/count")
+    fun getUserCardCount(
+        @PathVariable("user_id") userId: Int,
+        @PathVariable("card_id") cardId: String
+    ) = userService.getUserCardCount(userId, cardId)
+
     @GetMapping("/{user_id}/top3_cards")
     fun getUsersTop3CardsWithPrices(@PathVariable("user_id") userId: Int) = userService.getTop3(userId)
 

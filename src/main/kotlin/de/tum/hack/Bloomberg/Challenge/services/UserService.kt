@@ -1,5 +1,6 @@
 package de.tum.hack.Bloomberg.Challenge.services
 
+import de.tum.hack.Bloomberg.Challenge.api.Count
 import de.tum.hack.Bloomberg.Challenge.api.SortTypes
 import de.tum.hack.Bloomberg.Challenge.models.Side
 import de.tum.hack.Bloomberg.Challenge.models.User
@@ -47,6 +48,10 @@ class UserService(
             SortTypes.RARITY -> cardRepository.findAllByUserOrderByCardRarity(userId)
             else -> cardRepository.findAllByUserIdOrderByCardName(userId)
         }
+    }
+
+    fun getUserCardCount(userId: Int, cardId: String): Count {
+        return Count(count = userCardRepository.findFirstByUserIdAndCardId(userId, cardId)?.count)
     }
 
     fun getTop(userId: Int): List<Pair<UserCard, Double>> {

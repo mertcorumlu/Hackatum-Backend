@@ -8,4 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface UserCardRepository : JpaRepository<UserCard, Int> {
     fun findAllByUserId(userId: Int): List<UserCard>
     fun findFirstByUserAndCard(user: User, card: Card): UserCard?
+    fun findFirstByUserIdAndCardId(userId: Int, cardId: String): UserCard?
 }
