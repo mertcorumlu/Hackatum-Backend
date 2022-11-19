@@ -1,30 +1,25 @@
 package de.tum.hack.Bloomberg.Challenge.models
 
-import java.io.Serializable
+import com.fasterxml.jackson.annotation.JsonIgnore
 import javax.persistence.*
 
 @Entity
 @Table(name = "user_cards")
-@IdClass(UserCardId::class)
 data class UserCard (
 
     @Id
-    @MapsId("userId")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    var id: Int? = null,
+
+    @ManyToOne
     var user: User,
 
-    @Id
-    @MapsId("cardId")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "card_id", nullable = false, referencedColumnName = "card_id")
+    @ManyToOne
+    @JoinColumn(name = "card_id", referencedColumnName = "card_id")
     var card: Card,
 
     @Column(name = "count", nullable = false)
     var count: Int
 )
 
-class UserCardId (
-    val user: Int,
-    val card: Int
-): Serializable
