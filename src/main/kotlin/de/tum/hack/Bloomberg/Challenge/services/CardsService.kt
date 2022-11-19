@@ -60,6 +60,7 @@ class CardsService(val cardRepository: CardRepository) {
 
             master.snapshotOrder?.also { snapshot ->
                 master.quantity = snapshot.quantity
+                master.username = master.user.name
                 if (master.side == Side.BUY) {
                     buy.add(master)
                 } else {

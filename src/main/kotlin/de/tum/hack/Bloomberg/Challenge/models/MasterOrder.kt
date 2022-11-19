@@ -28,6 +28,7 @@ data class MasterOrder (
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     var user: User,
 
     @Column(name = "created", insertable = false, updatable = false)
@@ -41,5 +42,8 @@ data class MasterOrder (
 
     @OneToOne(mappedBy = "masterOrder")
     @JsonIgnore
-    var snapshotOrder: SnapshotOrder? = null
+    var snapshotOrder: SnapshotOrder? = null,
+
+    @Transient
+    var username: String? = null
 )
