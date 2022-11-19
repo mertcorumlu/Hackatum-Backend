@@ -50,7 +50,6 @@ class OrderResource(
             FilterTypes.CARDID -> {
                 cardId?.also {
                     return snapshots.filterSnapshotsByCardId(it)
-
                 } ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "missing param")
             }
         }
