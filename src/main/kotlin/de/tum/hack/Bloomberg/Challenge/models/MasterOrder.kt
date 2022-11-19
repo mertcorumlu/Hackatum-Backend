@@ -45,5 +45,13 @@ data class MasterOrder (
     var snapshotOrder: SnapshotOrder? = null,
 
     @Transient
-    var username: String? = null
+    var username: String? = null,
+
+    @JsonIgnore
+    @Column(name = "user_id", insertable = false, updatable = false)
+    var user_id: Int? = null,
+
+    @JsonIgnore
+    @Column(name = "card_id", insertable = false, updatable = false)
+    var card_id: String? = null
 )
