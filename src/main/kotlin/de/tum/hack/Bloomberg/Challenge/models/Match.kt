@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
-@Table(name = "match")
+@Table(name = "matches")
 data class Match (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

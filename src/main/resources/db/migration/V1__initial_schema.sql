@@ -42,7 +42,7 @@ CREATE TABLE OrderHistory
     CONSTRAINT order_history_security_fk FOREIGN KEY (security_id) REFERENCES Security (id)
 );
 
-CREATE TABLE Match
+CREATE TABLE Matches
 (
     id               INT PRIMARY KEY AUTO_INCREMENT,
     buying_order_id  INT,
