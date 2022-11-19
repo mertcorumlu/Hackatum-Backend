@@ -40,3 +40,6 @@ target
 secrets.yml
 .gradletasknamecache
 .sts4-cache
+.h2_db
+.DS_Store
+/.jpb
