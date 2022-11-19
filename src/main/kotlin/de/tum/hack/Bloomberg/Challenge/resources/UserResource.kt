@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController
 
 
 @RestController("/api")
-class UserRessource(val userService: UserService) {
+class UserResource(val userService: UserService) {
 
     @PostMapping("/sign-in")
     fun signIn(@RequestBody body: LoginPayload): User {
