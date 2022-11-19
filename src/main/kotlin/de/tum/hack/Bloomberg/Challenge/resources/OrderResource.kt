@@ -1,8 +1,10 @@
 package de.tum.hack.Bloomberg.Challenge.resources
 
-import de.tum.hack.Bloomberg.Challenge.api.FilterSnapshotsResponse
 import de.tum.hack.Bloomberg.Challenge.api.FilterTypes
 import de.tum.hack.Bloomberg.Challenge.api.OrderTO
+import de.tum.hack.Bloomberg.Challenge.models.Side
+import de.tum.hack.Bloomberg.Challenge.models.SnapshotOrder
+import de.tum.hack.Bloomberg.Challenge.repositories.SnapshotOrderRepository
 import de.tum.hack.Bloomberg.Challenge.services.CardsService
 import de.tum.hack.Bloomberg.Challenge.services.OrderService
 import de.tum.hack.Bloomberg.Challenge.services.UserService
@@ -15,7 +17,8 @@ import org.springframework.web.server.ResponseStatusException
 class OrderResource(
     val userService: UserService,
     val cardsService: CardsService,
-    val ordersService: OrderService
+    val ordersService: OrderService,
+    val snapshots: SnapshotOrderRepository
 ) {
 
     @PostMapping("/")
@@ -34,43 +37,23 @@ class OrderResource(
         ordersService.del(user, card, order)
     }
 
-<<<<<<< Updated upstream
-//    @GetMapping("/")
-//    fun filterSnapshots(@RequestParam("filterBy") filterBy: FilterTypes, @RequestParam("username") username: String? = null, @RequestParam("cardId") cardId: String? = null): FilterSnapshotsResponse {
-//        when (filterBy) {
-//            FilterTypes.BUY -> return ordersService.filterSnapshotsByBuy()
-//            FilterTypes.SELL -> return ordersService.filterSnapshotsBySell()
-//            FilterTypes.USERNAME -> {
-//                username?.also {
-//                    return ordersService.filterSnapshotsByUsername(it)
-//                } ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "missing param")
-//            }
-//            FilterTypes.CARDID -> {
-//                cardId?.also {
-//                    return ordersService.filterSnapshotsByCardId(it)
-//                } ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "missing param")
-//            }
-//        }
-//        throw ResponseStatusException(HttpStatus.NOT_FOUND, "no such filter")
-//    }
-=======
     @GetMapping("/")
-    fun filterSnapshots(@RequestParam("filterBy") filterBy: FilterTypes, @RequestParam(required = false) username: String, @RequestParam(required = false) cardId: String): FilterSnapshotsResponse {
+    fun filterSnapshots(@RequestParam("filterBy") filterBy: FilterTypes, @RequestParam("userId") userId: Int? = null, @RequestParam("cardId") cardId: String? = null): List<SnapshotOrder> {
         when (filterBy) {
-            FilterTypes.BUY -> return ordersService.filterSnapshotsByBuy()
-            FilterTypes.SELL -> return ordersService.filterSnapshotsBySell()
+            FilterTypes.BUY -> return snapshots.filterSnapshotsBySide(Side.BUY)
+            FilterTypes.SELL -> return snapshots.filterSnapshotsBySide(Side.SELL)
             FilterTypes.USERNAME -> {
-                username?.also {
-                    return ordersService.filterSnapshotsByUsername(it)
+                userId?.also {
+                    return snapshots.filterSnapshotsByUserId(it)
                 } ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "missing param")
             }
             FilterTypes.CARDID -> {
                 cardId?.also {
-                    return ordersService.filterSnapshotsByCardId(it)
+                    return snapshots.filterSnapshotsByCardId(it)
+
                 } ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "missing param")
             }
         }
         throw ResponseStatusException(HttpStatus.NOT_FOUND, "no such filter")
     }
->>>>>>> Stashed changes
 }

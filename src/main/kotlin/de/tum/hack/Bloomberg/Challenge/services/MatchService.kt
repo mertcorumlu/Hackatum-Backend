@@ -8,19 +8,19 @@ import org.springframework.stereotype.Service
 class MatchService(
         val match: MatchRepository
 ){
-    fun filterMatchesByBuy(): FilterMatchesResponse {
-        return match.filterMatchesByBuy()
-    }
-
-    fun filterMatchesBySell(): FilterMatchesResponse {
-        return match.filterMatchesBySell()
-    }
-
-    fun filterMatchesByCardId(cardId: String): FilterMatchesResponse {
-        return match.filterMatchesByCardId(cardId)
-    }
-
-    fun filterMatchesByUsername(username: String): FilterMatchesResponse {
-        return match.filterMatchesByUsername(username)
-    }
+//    fun filterMatchesByBuy(): FilterMatchesResponse {
+//        return match.filterMatchesByBuy()
+//    }
+//
+//    fun filterMatchesBySell(): FilterMatchesResponse {
+//        return match.filterMatchesBySell()
+//    }
+//
+//    fun filterMatchesByCardId(cardId: String): FilterMatchesResponse {
+//        return match.filterMatchesByCardId(cardId)
+//    }
+//
+//    fun filterMatchesByUsername(username: String): FilterMatchesResponse {
+//        return match.filterMatchesByUsername(username)
+//    }
 }

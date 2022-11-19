@@ -16,24 +16,24 @@ import org.springframework.web.server.ResponseStatusException
 class MatchRessource(
         val matchService: MatchService
 ) {
-
-    @GetMapping("/")
-    fun filterSnapshots(@RequestParam("filterBy") filterBy: FilterTypes, @RequestParam("username") username: String? = null, @RequestParam("cardId") cardId: String? = null): FilterMatchesResponse {
-        when (filterBy) {
-            FilterTypes.BUY -> return matchService.filterMatchesByBuy()
-            FilterTypes.SELL -> return matchService.filterMatchesBySell()
-            FilterTypes.USERNAME -> {
-                username?.also {
-                    return matchService.filterMatchesByUsername(it)
-                } ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "missing param")
-            }
-            FilterTypes.CARDID -> {
-                cardId?.also {
-                    return matchService.filterMatchesByCardId(it)
-                } ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "missing param")
-            }
-        }
-        throw ResponseStatusException(HttpStatus.NOT_FOUND, "no such filter")
-    }
+//
+//    @GetMapping("/")
+//    fun filterSnapshots(@RequestParam("filterBy") filterBy: FilterTypes, @RequestParam("username") username: String? = null, @RequestParam("cardId") cardId: String? = null): FilterMatchesResponse {
+//        when (filterBy) {
+//            FilterTypes.BUY -> return matchService.filterMatchesByBuy()
+//            FilterTypes.SELL -> return matchService.filterMatchesBySell()
+//            FilterTypes.USERNAME -> {
+//                username?.also {
+//                    return matchService.filterMatchesByUsername(it)
+//                } ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "missing param")
+//            }
+//            FilterTypes.CARDID -> {
+//                cardId?.also {
+//                    return matchService.filterMatchesByCardId(it)
+//                } ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "missing param")
+//            }
+//        }
+//        throw ResponseStatusException(HttpStatus.NOT_FOUND, "no such filter")
+//    }
 
 }
