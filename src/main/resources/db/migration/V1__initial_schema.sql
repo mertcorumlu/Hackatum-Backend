@@ -12,7 +12,7 @@ CREATE TABLE cards
     id        INT PRIMARY KEY AUTO_INCREMENT,
     card_id   VARCHAR(255) UNIQUE NOT NULL,
     name      VARCHAR(255)        NOT NULL,
-    rarity    VARCHAR(30)         NOT NULL,
+    rarity    VARCHAR(30),
     image_url VARCHAR(255)        NOT NULL
 );
 

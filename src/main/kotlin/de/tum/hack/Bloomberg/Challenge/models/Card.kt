@@ -1,5 +1,6 @@
 package de.tum.hack.Bloomberg.Challenge.models
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Id
@@ -20,11 +21,12 @@ data class Card (
     var name: String,
 
     @Column(name = "rarity", length = 30)
-    var rarity: String,
+    var rarity: String? = null,
 
     @Column(name = "image_url", nullable = false)
     var imageUrl: String,
 
+    @JsonIgnore
     @OneToMany(mappedBy = "card")
     var masterOrders: List<MasterOrder> = emptyList()
 )
