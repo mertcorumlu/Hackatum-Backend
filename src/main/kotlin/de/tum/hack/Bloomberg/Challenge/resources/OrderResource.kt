@@ -38,21 +38,26 @@ class OrderResource(
     }
 
     @GetMapping("/")
-    fun filterSnapshots(@RequestParam("filterBy") filterBy: FilterTypes, @RequestParam("userId") userId: Int? = null, @RequestParam("cardId") cardId: String? = null): List<SnapshotOrder> {
-        when (filterBy) {
+    fun filterSnapshots(
+        @RequestParam("filterBy", required = false) filterBy: FilterTypes? = null,
+        @RequestParam("userId", required = false) userId: Int? = null,
+        @RequestParam("cardId") cardId: String? = null): List<SnapshotOrder> {
+        return when (filterBy) {
             FilterTypes.BUY -> return snapshots.filterSnapshotsBySide(Side.BUY)
             FilterTypes.SELL -> return snapshots.filterSnapshotsBySide(Side.SELL)
-            FilterTypes.USERNAME -> {
-                userId?.also {
-                    return snapshots.filterSnapshotsByUserId(it)
+            FilterTypes.USERID -> {
+                userId?.let {
+                    snapshots.filterSnapshotsByUserId(it)
                 } ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "missing param")
             }
             FilterTypes.CARDID -> {
-                cardId?.also {
-                    return snapshots.filterSnapshotsByCardId(it)
+                cardId?.let {
+                    snapshots.filterSnapshotsByCardId(it)
                 } ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "missing param")
             }
+            else -> {
+                snapshots.findAll()
+            }
         }
-        throw ResponseStatusException(HttpStatus.NOT_FOUND, "no such filter")
     }
 }

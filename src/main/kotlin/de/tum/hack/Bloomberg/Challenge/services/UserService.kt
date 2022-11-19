@@ -48,14 +48,17 @@ class UserService(
     fun getTop(userId: Int): List<Pair<UserCard, Double>> {
         val userCards = userCardRepository.findAllByUserId(userId)
 
-        val list = userCards.mapNotNull { userCard ->
+        return userCards.mapNotNull { userCard ->
             return@mapNotNull masterOrderRepository.findAllByCompletedIsFalseAndSideAndCard(Side.SELL, userCard.card).minByOrNull { it.price }?.price?.let {
                 userCard to it
             }
         }
         .sortedBy { it.second }
         .reversed()
+    }
 
+    fun getTop3(userId: Int): List<Pair<UserCard, Double>>  {
+        val list = getTop(userId)
         return list.subList(0, min(3, list.size))
     }
 }

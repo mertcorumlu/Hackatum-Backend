@@ -1,6 +1,5 @@
 package de.tum.hack.Bloomberg.Challenge.repositories;
 
-import de.tum.hack.Bloomberg.Challenge.api.FilterSnapshotsResponse
 import de.tum.hack.Bloomberg.Challenge.models.Side
 import de.tum.hack.Bloomberg.Challenge.models.SnapshotOrder
 import org.springframework.data.jpa.repository.JpaRepository

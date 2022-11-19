@@ -4,5 +4,5 @@ enum class FilterTypes {
     BUY,
     SELL,
     CARDID,
-    USERNAME
+    USERID
 }

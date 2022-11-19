@@ -21,7 +21,13 @@ class UserResource(val userService: UserService) {
     }
 
     @GetMapping("/{user_id}/cards")
-    fun filterCards(@PathVariable("user_id") userId: Int, @RequestParam("sortBy") sortBy: SortTypes) = userService.sortCards(userId, sortBy)
+    fun filterCards(
+        @PathVariable("user_id") userId: Int,
+        @RequestParam("sortBy") sortBy: SortTypes
+    ) = userService.sortCards(userId, sortBy)
+
+    @GetMapping("/{user_id}/top_3_cards")
+    fun getTop3Cards(@PathVariable("user_id") userId: Int) = userService.getTop3(userId)
 
     @GetMapping("/{user_id}/top_cards")
     fun getTopCards(@PathVariable("user_id") userId: Int) = userService.getTop(userId)
