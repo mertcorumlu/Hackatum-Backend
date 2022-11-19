@@ -26,5 +26,5 @@ data class User (
 
     @OneToMany(mappedBy = "user")
     @JsonIgnore
-    var cards: List<UserCard> = emptyList()
+    var userCards: List<UserCard> = emptyList()
 )
