@@ -36,7 +36,7 @@ data class MasterOrder (
     var updated: LocalDateTime? = null,
 
     @Column(name = "completed")
-    var completed: Boolean,
+    var completed: Boolean = false,
 
     @OneToOne(mappedBy = "masterOrder")
     var snapshotOrder: SnapshotOrder? = null

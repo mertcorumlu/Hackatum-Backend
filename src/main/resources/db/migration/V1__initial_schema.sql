@@ -7,7 +7,7 @@ CREATE TABLE users
     balance    DOUBLE              NOT NULL DEFAULT 0
 );
 
-CREATE TABLE cards
+CREATE TABLE IF NOT EXISTS `cards`
 (
     id        INT PRIMARY KEY AUTO_INCREMENT,
     card_id   VARCHAR(255) UNIQUE NOT NULL,
@@ -50,21 +50,14 @@ CREATE TABLE snapshot_orders
     CONSTRAINT master_order_fk FOREIGN KEY (master_order_id) REFERENCES master_orders (id)
 );
 
-CREATE TABLE child_orders
-(
-    id       INT PRIMARY KEY AUTO_INCREMENT,
-    order_id INT       NOT NULL,
-    quantity INTEGER   NOT NULL,
-    price    DOUBLE    NOT NULL,
-    created  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT order_history_order_fk FOREIGN KEY (order_id) REFERENCES master_orders (id)
-);
-
 CREATE TABLE matches
 (
     id               INT PRIMARY KEY AUTO_INCREMENT,
-    buying_order_id  INT NOT NULL,
-    selling_order_id INT NOT NULL,
-    CONSTRAINT match_buying_fk FOREIGN KEY (buying_order_id) REFERENCES child_orders (id),
-    CONSTRAINT match_selling_fk FOREIGN KEY (selling_order_id) REFERENCES child_orders (id)
+    buying_order_id  INT       NOT NULL,
+    selling_order_id INT       NOT NULL,
+    quantity         INTEGER   NOT NULL,
+    price            DOUBLE    NOT NULL,
+    created          TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT match_buying_fk FOREIGN KEY (buying_order_id) REFERENCES master_orders (id),
+    CONSTRAINT match_selling_fk FOREIGN KEY (selling_order_id) REFERENCES master_orders (id)
 );

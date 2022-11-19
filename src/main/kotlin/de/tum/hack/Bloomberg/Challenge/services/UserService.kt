@@ -11,11 +11,8 @@ import java.time.LocalDateTime
 @Service
 class UserService(val userRepository: UserRepository) {
     fun signIn(username: String, password: String): User {
-        val ret = userRepository.findAllByNameEqualsAndPasswordEquals(username, password)
-        ret?.also {
-            return ret
-        }
-        throw ResponseStatusException(HttpStatus.NOT_FOUND, "No user found")
+        return userRepository.findByNameAndPassword(username, password)
+            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "No user found")
     }
 
     fun signUp(username: String, password: String): User {
