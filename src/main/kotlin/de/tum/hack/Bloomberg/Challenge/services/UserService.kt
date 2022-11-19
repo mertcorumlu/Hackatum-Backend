@@ -52,10 +52,10 @@ class UserService(
     fun getTop(userId: Int): List<Pair<UserCard, Double>> {
         val userCards = userCardRepository.findAllByUserId(userId)
 
-        return userCards.mapNotNull { userCard ->
-            return@mapNotNull masterOrderRepository.findAllByCompletedIsFalseAndSideAndCard(Side.SELL, userCard.card).minByOrNull { it.price }?.price?.let {
+        return userCards.map { userCard ->
+            return@map masterOrderRepository.findAllByCompletedIsFalseAndSideAndCard(Side.SELL, userCard.card).minByOrNull { it.price }?.price?.let {
                 userCard to it
-            }
+            } ?: (userCard to 0.0)
         }
         .sortedBy { it.second }
         .reversed()
