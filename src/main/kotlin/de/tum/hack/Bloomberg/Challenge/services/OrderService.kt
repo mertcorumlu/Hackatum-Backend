@@ -1,5 +1,6 @@
 package de.tum.hack.Bloomberg.Challenge.services
 
+import de.tum.hack.Bloomberg.Challenge.api.FilterSnapshotsResponse
 import de.tum.hack.Bloomberg.Challenge.api.OrderTO
 import de.tum.hack.Bloomberg.Challenge.models.*
 import de.tum.hack.Bloomberg.Challenge.repositories.MasterOrderRepository
@@ -151,6 +152,22 @@ class OrderService(
         }
 
         return ret
+    }
+
+    fun filterSnapshotsByBuy(): FilterSnapshotsResponse {
+        return snapshots.filterSnapshotsByBuy()
+    }
+
+    fun filterSnapshotsBySell(): FilterSnapshotsResponse {
+        return snapshots.filterSnapshotsBySell()
+    }
+
+    fun filterSnapshotsByCardId(cardId: String): FilterSnapshotsResponse {
+        return snapshots.filterSnapshotsByCardId(cardId)
+    }
+
+    fun filterSnapshotsByUsername(username: String): FilterSnapshotsResponse {
+        return snapshots.filterSnapshotsByUsername(username)
     }
 
 }
