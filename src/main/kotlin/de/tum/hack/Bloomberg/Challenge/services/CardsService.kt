@@ -2,6 +2,7 @@ package de.tum.hack.Bloomberg.Challenge.services
 
 import de.tum.hack.Bloomberg.Challenge.api.BuySellOrdersResponse
 import de.tum.hack.Bloomberg.Challenge.models.Card
+import de.tum.hack.Bloomberg.Challenge.models.MasterOrder
 import de.tum.hack.Bloomberg.Challenge.models.Side
 import de.tum.hack.Bloomberg.Challenge.models.SnapshotOrder
 import de.tum.hack.Bloomberg.Challenge.repositories.CardRepository
@@ -52,16 +53,17 @@ class CardsService(val cardRepository: CardRepository) {
     fun getOrders(card_id: String): BuySellOrdersResponse {
 
         val card = find(card_id)
-        val buy: MutableList<SnapshotOrder> = mutableListOf()
-        val sell: MutableList<SnapshotOrder> = mutableListOf()
+        val buy: MutableList<MasterOrder> = mutableListOf()
+        val sell: MutableList<MasterOrder> = mutableListOf()
 
         card.masterOrders.forEach {  master ->
 
             master.snapshotOrder?.also { snapshot ->
+                master.quantity = snapshot.quantity
                 if (master.side == Side.BUY) {
-                    buy.add(snapshot)
+                    buy.add(master)
                 } else {
-                    sell.add(snapshot)
+                    sell.add(master)
                 }
             }
 

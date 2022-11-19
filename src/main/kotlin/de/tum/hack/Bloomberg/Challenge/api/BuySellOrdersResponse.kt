@@ -1,8 +1,8 @@
 package de.tum.hack.Bloomberg.Challenge.api
 
-import de.tum.hack.Bloomberg.Challenge.models.SnapshotOrder
+import de.tum.hack.Bloomberg.Challenge.models.MasterOrder
 
 class BuySellOrdersResponse(
-    val buy: MutableList<SnapshotOrder> = mutableListOf(),
-    val sell: MutableList<SnapshotOrder> = mutableListOf()
+    val buy: MutableList<MasterOrder> = mutableListOf(),
+    val sell: MutableList<MasterOrder> = mutableListOf()
 )
