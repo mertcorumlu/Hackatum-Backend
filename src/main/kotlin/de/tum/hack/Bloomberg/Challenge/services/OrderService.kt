@@ -99,8 +99,10 @@ class OrderService(
 
         val master = pair.first
 
-        master.user.balance -= order.price * order.quantity
+        if (master.user.balance < order.price * order.quantity)
+            throw ResponseStatusException(HttpStatus.NOT_ACCEPTABLE)
 
+        master.user.balance -= order.price * order.quantity
         userRepository.saveAndFlush(master.user)
 
         if (pair.second) {
