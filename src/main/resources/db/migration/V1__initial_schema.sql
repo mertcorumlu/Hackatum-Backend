@@ -18,10 +18,11 @@ CREATE TABLE cards
 
 CREATE TABLE user_cards
 (
+    id      INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT          NOT NULL,
     card_id VARCHAR(255) NOT NULL,
     count   INT          NOT NULL,
-    PRIMARY KEY (user_id, card_id),
+    UNIQUE (user_id, card_id),
     CONSTRAINT usercards_user_fk FOREIGN KEY (user_id) REFERENCES users (id),
     CONSTRAINT usercards_card_fk FOREIGN KEY (card_id) REFERENCES cards (card_id)
 );
