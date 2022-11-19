@@ -70,4 +70,8 @@ class CardsService(val cardRepository: CardRepository) {
         return BuySellOrdersResponse(buy, sell)
     }
 
+    fun add(card: Card) {
+        cardRepository.save(card)
+    }
+
 }
