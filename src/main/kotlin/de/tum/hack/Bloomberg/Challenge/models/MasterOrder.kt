@@ -29,10 +29,10 @@ data class MasterOrder (
     @JoinColumn(name = "user_id", nullable = false)
     var user: User,
 
-    @Column(name = "created", nullable = false)
+    @Column(name = "created", insertable = false, updatable = false)
     var created: LocalDateTime? = null,
 
-    @Column(name = "updated", nullable = false)
+    @Column(name = "updated", insertable = false)
     var updated: LocalDateTime? = null,
 
     @Column(name = "completed")

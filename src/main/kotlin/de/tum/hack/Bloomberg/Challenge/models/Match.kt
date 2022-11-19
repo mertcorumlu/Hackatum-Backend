@@ -12,11 +12,11 @@ data class Match (
     var id: Int? = null,
 
     @ManyToOne
-    @JoinColumn(name = "buyer_order_id")
+    @JoinColumn(name = "buying_order_id")
     var buyer: MasterOrder,
 
     @ManyToOne
-    @JoinColumn(name = "seller_order_id")
+    @JoinColumn(name = "selling_order_id")
     var seller: MasterOrder,
 
     @Column(name = "quantity", nullable = false)

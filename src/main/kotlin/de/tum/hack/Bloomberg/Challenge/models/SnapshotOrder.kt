@@ -10,8 +10,8 @@ data class SnapshotOrder (
     @Column(name = "id", nullable = false)
     var id: Int? = null,
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "master_order_id", nullable = false)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "master_order_id")
     var masterOrder: MasterOrder,
 
     @Column(name = "quantity", nullable = false)

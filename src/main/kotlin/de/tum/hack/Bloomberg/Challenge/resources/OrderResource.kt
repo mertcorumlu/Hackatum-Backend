@@ -4,10 +4,7 @@ import de.tum.hack.Bloomberg.Challenge.api.OrderTO
 import de.tum.hack.Bloomberg.Challenge.services.CardsService
 import de.tum.hack.Bloomberg.Challenge.services.OrderService
 import de.tum.hack.Bloomberg.Challenge.services.UserService
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/order")
@@ -17,7 +14,7 @@ class OrderResource(
     val ordersService: OrderService
 ) {
 
-    @PostMapping("/add")
+    @PostMapping("/")
     fun addOrder(@RequestBody order: OrderTO) {
         val user = userService.signIn(order.username, order.password)
         val card = cardsService.find(order.cardId)
@@ -25,7 +22,7 @@ class OrderResource(
         ordersService.add(user, card, order)
     }
 
-    @PostMapping("/del")
+    @DeleteMapping("/")
     fun delOrder(@RequestBody order: OrderTO) {
         val user = userService.signIn(order.username, order.password)
         val card = cardsService.find(order.cardId)

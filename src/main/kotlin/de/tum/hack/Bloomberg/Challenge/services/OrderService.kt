@@ -5,12 +5,11 @@ import de.tum.hack.Bloomberg.Challenge.models.*
 import de.tum.hack.Bloomberg.Challenge.repositories.MasterOrderRepository
 import de.tum.hack.Bloomberg.Challenge.repositories.MatchRepository
 import de.tum.hack.Bloomberg.Challenge.repositories.SnapshotOrderRepository
-import org.slf4j.LoggerFactory
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.server.ResponseStatusException
+import java.time.LocalDateTime
 import kotlin.math.min
 
 @Service
@@ -24,7 +23,7 @@ class OrderService(
         masters.findAllByUserAndCardAndCompletedIsFalseAndSide(user, card, side).firstOrNull()
 
     fun createIfNull(user: User, card: Card, order: OrderTO): Pair<MasterOrder, Boolean> {
-        val master = getMaster(user, card, side = order.side)
+        var master = getMaster(user, card, side = order.side)
 
         if (master != null) { return master to true }
 
@@ -33,35 +32,42 @@ class OrderService(
             user = user,
             quantity = order.quantity,
             price = order.price,
-            side = order.side
+            side = order.side,
+            updated = LocalDateTime.now()
         )
 
-        val snapEntity = SnapshotOrder(
-            masterOrder = masterEntity,
+        master = masters.saveAndFlush(masterEntity)
+
+        var snapEntity = SnapshotOrder(
+            masterOrder = master,
             quantity = order.quantity
         )
 
-        snapshots.saveAndFlush(snapEntity)
-        return masters.saveAndFlush(masterEntity) to false
+        snapEntity = snapshots.saveAndFlush(snapEntity)
+
+        masterEntity.snapshotOrder = snapEntity
+        master = masters.saveAndFlush(master)
+
+        return master to false
     }
 
     @Transactional
     fun add(user: User, card: Card, order: OrderTO) {
         val pair = createIfNull(user, card, order)
 
-        if (!pair.second) { return }
-
-        // first increase
         val master = pair.first
-        master.quantity += order.quantity
-        master.snapshotOrder?.also{
-            it.quantity += order.quantity
-            snapshots.saveAndFlush(it)
-        }
-        masters.saveAndFlush(master)
 
-       findMatching(master)
-        return
+        if (pair.second) {
+            master.quantity += order.quantity
+            master.updated = LocalDateTime.now()
+            master.snapshotOrder?.also{
+                it.quantity += order.quantity
+                snapshots.saveAndFlush(it)
+            }
+            masters.saveAndFlush(master)
+        }
+
+        findMatching(master)
     }
 
     @Transactional
@@ -106,6 +112,8 @@ class OrderService(
 
     private fun MasterOrder.buy(seller: SnapshotOrder, reverse: Boolean): Boolean {
 
+        var ret = true.xor(reverse)
+
         val quant = min(seller.quantity, this.quantity)
 
         val match = Match(
@@ -121,26 +129,28 @@ class OrderService(
 
             if (it.quantity == 0) {
                 this.completed = true
+                this.updated = LocalDateTime.now()
                 masters.saveAndFlush(this)
                 snapshots.delete(it)
 
-                return false.xor(reverse)
+                ret = false.xor(reverse)
+            } else {
+                snapshots.saveAndFlush(it)
             }
-
-            snapshots.saveAndFlush(it)
         }
 
         seller.quantity -= quant
 
         if (seller.quantity == 0) {
             seller.masterOrder.completed = true
+            seller.masterOrder.updated = LocalDateTime.now()
             masters.saveAndFlush(seller.masterOrder)
             snapshots.delete(seller)
-            return true.xor(reverse)
+        } else {
+            snapshots.saveAndFlush(seller)
         }
 
-        snapshots.saveAndFlush(seller)
-        return true.xor(reverse)
+        return ret
     }
 
 }
