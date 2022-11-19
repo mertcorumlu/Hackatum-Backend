@@ -23,7 +23,7 @@ class MatchService(val matchRepository: MatchRepository) {
             match.seller.username = match.seller.user.name
             match.buyer.username = match.buyer.user.name
             match
-        }
+        }.sortedBy { it.created }.reversed()
     }
 
 }
