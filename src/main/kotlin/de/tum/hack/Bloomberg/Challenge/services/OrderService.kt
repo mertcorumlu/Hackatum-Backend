@@ -99,6 +99,10 @@ class OrderService(
 
         val master = pair.first
 
+        master.user.balance -= order.price * order.quantity
+
+        userRepository.saveAndFlush(master.user)
+
         if (pair.second) {
             master.quantity += order.quantity
             master.updated = LocalDateTime.now()
@@ -129,7 +133,9 @@ class OrderService(
         }
 
         master.quantity -= order.quantity
+        master.user.balance += order.price * order.price
 
+        userRepository.saveAndFlush(master.user)
         snapshots.saveAndFlush(snapshot)
         masters.saveAndFlush(master)
     }
@@ -161,10 +167,10 @@ class OrderService(
 
         // balance update
         seller.masterOrder.user.balance += quant * price
-        this.user.balance -= quant * price
+//        this.user.balance -= quant * price
 
         userRepository.save(seller.masterOrder.user)
-        userRepository.save(this.user)
+//        userRepository.save(this.user)
 
         val card = this.card
 
