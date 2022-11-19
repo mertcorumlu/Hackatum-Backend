@@ -13,41 +13,40 @@ interface SnapshotOrderRepository : JpaRepository<SnapshotOrder, Int> {
         s.masterOrder.price >= :price order by s.masterOrder.price
         """)
     fun findBuyersForSeller(cardId: String, user_id: Int, price: Double): List<SnapshotOrder>
-    fun findByMasterOrderId()
 
     fun findAllById(userId: Int): List<SnapshotOrder>
 
-    @Query("""
-        select * from snapshotorders s
-        join masterorders m on s.master_order_id = m.id
-        where m.side = false
-        order by m.price
-        """, nativeQuery = true)
-    fun filterSnapshotsByBuy(): FilterSnapshotsResponse
-
-    @Query("""
-        select * from snapshotorders s
-        join masterorders m on s.master_order_id = m.id
-        where m.side = true
-        order by m.price
-        """, nativeQuery = true)
-    fun filterSnapshotsBySell(): FilterSnapshotsResponse
-
-    @Query("""
-        select * from snapshotorders s
-        join masterorders m on s.master_order_id = m.id
-        where m.card_id = :cardId
-        order by m.price
-        """, nativeQuery = true)
-    fun filterSnapshotsByCardId(cardId: String): FilterSnapshotsResponse
-
-    @Query("""
-        select * from snapshotorders s
-        join masterorders m, users u on s.master_order_id = m.id and m.user_id = users.id
-        where u.username = :username
-        order by m.price
-        """, nativeQuery = true)
-    fun filterSnapshotsByUsername(username: String): FilterSnapshotsResponse
+//    @Query("""
+//        select * from snapshotorders s
+//        join masterorders m on s.master_order_id = m.id
+//        where m.side = false
+//        order by m.price
+//        """, nativeQuery = true)
+//    fun filterSnapshotsByBuy(): FilterSnapshotsResponse
+//
+//    @Query("""
+//        select * from snapshotorders s
+//        join masterorders m on s.master_order_id = m.id
+//        where m.side = true
+//        order by m.price
+//        """, nativeQuery = true)
+//    fun filterSnapshotsBySell(): FilterSnapshotsResponse
+//
+//    @Query("""
+//        select * from snapshotorders s
+//        join masterorders m on s.master_order_id = m.id
+//        where m.card_id = :cardId
+//        order by m.price
+//        """, nativeQuery = true)
+//    fun filterSnapshotsByCardId(cardId: String): FilterSnapshotsResponse
+//
+//    @Query("""
+//        select * from snapshotorders s
+//        join masterorders m, users u on s.master_order_id = m.id and m.user_id = users.id
+//        where u.username = :username
+//        order by m.price
+//        """, nativeQuery = true)
+//    fun filterSnapshotsByUsername(username: String): FilterSnapshotsResponse
 
     @Query("""
         select s from SnapshotOrder s 
