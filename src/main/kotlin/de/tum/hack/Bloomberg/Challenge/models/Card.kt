@@ -7,20 +7,20 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "Cards")
-open class Card {
+data class Card (
     @Id
     @Column(name = "id", nullable = false)
-    open var id: Int? = null
+    var id: Int? = null,
 
     @Column(name = "card_id", nullable = false)
-    open var cardId: String? = null
+    var cardId: String,
 
     @Column(name = "name", nullable = false)
-    open var name: String? = null
+    var name: String,
 
     @Column(name = "rarity", length = 30)
-    open var rarity: String? = null
+    var rarity: String,
 
     @Column(name = "image_url", nullable = false)
-    open var imageUrl: String? = null
-}
+    var imageUrl: String,
+)

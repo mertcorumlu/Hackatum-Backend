@@ -1,38 +1,38 @@
 package de.tum.hack.Bloomberg.Challenge.models
 
-import java.time.Instant
+import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
 @Table(name = "MasterOrders")
-open class MasterOrder {
+data class MasterOrder (
     @Id
     @Column(name = "id", nullable = false)
-    open var id: Int? = null
+    var id: Int? = null,
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "card_id", nullable = false, referencedColumnName = "card_id")
-    open var card: Card? = null
+    var card: Card,
 
     @Column(name = "quantity", nullable = false)
-    open var quantity: Int? = null
+    var quantity: Int,
 
     @Column(name = "price", nullable = false)
-    open var price: Double? = null
+    var price: Double,
 
     @Column(name = "side", nullable = false)
-    open var side: Boolean? = false
+    var side: Boolean,
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
-    open var user: de.tum.hack.Bloomberg.Challenge.models.User? = null
+    var user: User,
 
     @Column(name = "created", nullable = false)
-    open var created: Instant? = null
+    var created: LocalDateTime? = null,
 
     @Column(name = "updated", nullable = false)
-    open var updated: Instant? = null
+    var updated: LocalDateTime? = null,
 
     @Column(name = "completed")
-    open var completed: Boolean? = null
-}
+    var completed: Boolean
+)

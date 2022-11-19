@@ -2,7 +2,7 @@ CREATE TABLE Users
 (
     id         INT PRIMARY KEY auto_increment,
     name       VARCHAR(255) UNIQUE NOT NULL,
-    password   VARCHAR(50),
+    password   VARCHAR(50)         NOT NULL,
     registered TIMESTAMP           NOT NULL DEFAULT CURRENT_TIMESTAMP,
     balance    DOUBLE              NOT NULL DEFAULT 0
 );
@@ -12,7 +12,7 @@ CREATE TABLE Cards
     id        INT PRIMARY KEY AUTO_INCREMENT,
     card_id   VARCHAR(255) UNIQUE NOT NULL,
     name      VARCHAR(255)        NOT NULL,
-    rarity    VARCHAR(30),
+    rarity    VARCHAR(30)         NOT NULL,
     image_url VARCHAR(255)        NOT NULL
 );
 
@@ -36,7 +36,7 @@ CREATE TABLE MasterOrders
     user_id   INT          NOT NULL,
     created   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    completed BIT                   DEFAULT false,
+    completed BIT          NOT NULL DEFAULT false,
     CONSTRAINT orders_user_fk FOREIGN KEY (user_id) REFERENCES Users (id),
     CONSTRAINT orders_card_fk FOREIGN KEY (card_id) REFERENCES Cards (card_id)
 );
@@ -52,10 +52,10 @@ CREATE TABLE SnapshotOrders
 CREATE TABLE ChildOrders
 (
     id       INT PRIMARY KEY AUTO_INCREMENT,
-    order_id INT     NOT NULL,
-    quantity INTEGER NOT NULL,
-    price    DOUBLE  NOT NULL,
-    created  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    order_id INT       NOT NULL,
+    quantity INTEGER   NOT NULL,
+    price    DOUBLE    NOT NULL,
+    created  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT order_history_order_fk FOREIGN KEY (order_id) REFERENCES MasterOrders (id)
 );
 

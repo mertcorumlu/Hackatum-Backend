@@ -4,16 +4,16 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "Matches")
-open class Match {
+data class Match (
     @Id
     @Column(name = "id", nullable = false)
-    open var id: Int? = null
+    var id: Int? = null,
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "buying_order_id", nullable = false)
-    open var buyingOrder: ChildOrder? = null
+    var buyingOrder: ChildOrder,
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "selling_order_id", nullable = false)
-    open var sellingOrder: ChildOrder? = null
-}
+    var sellingOrder: ChildOrder
+)

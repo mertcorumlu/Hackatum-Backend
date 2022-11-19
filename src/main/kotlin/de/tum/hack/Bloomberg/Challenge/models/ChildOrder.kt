@@ -1,25 +1,25 @@
 package de.tum.hack.Bloomberg.Challenge.models
 
-import java.time.Instant
+import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
 @Table(name = "ChildOrders")
-open class ChildOrder {
+data class ChildOrder (
     @Id
     @Column(name = "id", nullable = false)
-    open var id: Int? = null
+    var id: Int? = null,
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "order_id", nullable = false)
-    open var order: de.tum.hack.Bloomberg.Challenge.models.MasterOrder? = null
+    var order: MasterOrder,
 
     @Column(name = "quantity", nullable = false)
-    open var quantity: Int? = null
+    var quantity: Int,
 
     @Column(name = "price", nullable = false)
-    open var price: Double? = null
+    var price: Double,
 
     @Column(name = "created")
-    open var created: Instant? = null
-}
+    var created: LocalDateTime? = null
+)

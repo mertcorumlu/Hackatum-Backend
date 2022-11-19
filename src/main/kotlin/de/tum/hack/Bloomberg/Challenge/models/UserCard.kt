@@ -1,23 +1,30 @@
 package de.tum.hack.Bloomberg.Challenge.models
 
+import java.io.Serializable
 import javax.persistence.*
 
 @Entity
 @Table(name = "UserCards")
-open class UserCard {
-    @EmbeddedId
-    open var id: UserCardId? = null
+@IdClass(UserCardId::class)
+data class UserCard (
 
+    @Id
     @MapsId("userId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
-    open var user: de.tum.hack.Bloomberg.Challenge.models.User? = null
+    var user: User,
 
+    @Id
     @MapsId("cardId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "card_id", nullable = false, referencedColumnName = "card_id")
-    open var card: Card? = null
+    var card: Card,
 
     @Column(name = "count", nullable = false)
-    open var count: Int? = null
-}
+    var count: Int
+)
+
+class UserCardId (
+    val user: Int,
+    val card: Int
+): Serializable
