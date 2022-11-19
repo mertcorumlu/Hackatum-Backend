@@ -15,7 +15,7 @@ import org.springframework.web.server.ResponseStatusException
 class OrderResource(
     val userService: UserService,
     val cardsService: CardsService,
-    val ordersService: OrderService,
+    val ordersService: OrderService
 ) {
 
     @PostMapping("/")
@@ -34,6 +34,7 @@ class OrderResource(
         ordersService.del(user, card, order)
     }
 
+<<<<<<< Updated upstream
 //    @GetMapping("/")
 //    fun filterSnapshots(@RequestParam("filterBy") filterBy: FilterTypes, @RequestParam("username") username: String? = null, @RequestParam("cardId") cardId: String? = null): FilterSnapshotsResponse {
 //        when (filterBy) {
@@ -52,4 +53,24 @@ class OrderResource(
 //        }
 //        throw ResponseStatusException(HttpStatus.NOT_FOUND, "no such filter")
 //    }
+=======
+    @GetMapping("/")
+    fun filterSnapshots(@RequestParam("filterBy") filterBy: FilterTypes, @RequestParam(required = false) username: String, @RequestParam(required = false) cardId: String): FilterSnapshotsResponse {
+        when (filterBy) {
+            FilterTypes.BUY -> return ordersService.filterSnapshotsByBuy()
+            FilterTypes.SELL -> return ordersService.filterSnapshotsBySell()
+            FilterTypes.USERNAME -> {
+                username?.also {
+                    return ordersService.filterSnapshotsByUsername(it)
+                } ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "missing param")
+            }
+            FilterTypes.CARDID -> {
+                cardId?.also {
+                    return ordersService.filterSnapshotsByCardId(it)
+                } ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "missing param")
+            }
+        }
+        throw ResponseStatusException(HttpStatus.NOT_FOUND, "no such filter")
+    }
+>>>>>>> Stashed changes
 }
