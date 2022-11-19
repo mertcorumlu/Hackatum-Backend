@@ -1,25 +1,25 @@
 package de.tum.hack.Bloomberg.Challenge.models
 
-import java.time.LocalDateTime
+import java.time.Instant
 import javax.persistence.*
 
 @Entity
-@Table(name = "users")
-data class User (
+@Table(name = "Users")
+open class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    var id: Int? = null,
+    open var id: Int? = null
 
-    @Column(name = "name")
-    var name: String,
+    @Column(name = "name", nullable = false)
+    open var name: String? = null
+
+    @Column(name = "password", length = 50)
+    open var password: String? = null
 
     @Column(name = "registered", nullable = false)
-    var registered: LocalDateTime,
+    open var registered: Instant? = null
 
-    @OneToMany(mappedBy = "user")
-    var orderHistories: MutableSet<Orderhistory> = mutableSetOf(),
-
-    @OneToMany(mappedBy = "user")
-    var orders: MutableSet<Order> = mutableSetOf()
-)
+    @Column(name = "balance", nullable = false)
+    open var balance: Double? = null
+}
