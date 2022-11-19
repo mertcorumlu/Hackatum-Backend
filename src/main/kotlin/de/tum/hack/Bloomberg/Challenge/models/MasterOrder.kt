@@ -1,5 +1,6 @@
 package de.tum.hack.Bloomberg.Challenge.models
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import java.time.LocalDateTime
 import javax.persistence.*
 
@@ -39,5 +40,6 @@ data class MasterOrder (
     var completed: Boolean = false,
 
     @OneToOne(mappedBy = "masterOrder")
+    @JsonIgnore
     var snapshotOrder: SnapshotOrder? = null
 )

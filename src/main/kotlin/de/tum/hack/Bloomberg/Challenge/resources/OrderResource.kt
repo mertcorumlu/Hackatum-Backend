@@ -41,7 +41,7 @@ class OrderResource(
     fun filterSnapshots(
         @RequestParam("filterBy", required = false) filterBy: FilterTypes? = null,
         @RequestParam("userId", required = false) userId: Int? = null,
-        @RequestParam("cardId") cardId: String? = null): List<SnapshotOrder> {
+        @RequestParam("cardId", required = false) cardId: String? = null): List<SnapshotOrder> {
         return when (filterBy) {
             FilterTypes.BUY -> return snapshots.filterSnapshotsBySide(Side.BUY)
             FilterTypes.SELL -> return snapshots.filterSnapshotsBySide(Side.SELL)

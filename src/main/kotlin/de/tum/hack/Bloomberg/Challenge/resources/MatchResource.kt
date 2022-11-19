@@ -17,7 +17,7 @@ class MatchResource(
 ) {
 
     @GetMapping("/")
-    fun filterSnapshots(
+    fun filterMatches(
         @RequestParam("filterBy", required = false) filterBy: FilterTypes? = null,
         @RequestParam("userId", required = false) userId: Int? = null,
         @RequestParam("cardId", required = false) cardId: String? = null
