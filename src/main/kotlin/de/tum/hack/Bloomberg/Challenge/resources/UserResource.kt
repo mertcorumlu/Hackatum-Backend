@@ -6,7 +6,7 @@ import de.tum.hack.Bloomberg.Challenge.models.User
 import de.tum.hack.Bloomberg.Challenge.services.UserService
 import org.springframework.web.bind.annotation.*
 
-@RestController()
+@RestController
 @RequestMapping("/api/user")
 class UserResource(val userService: UserService) {
 
@@ -21,14 +21,14 @@ class UserResource(val userService: UserService) {
     }
 
     @GetMapping("/{user_id}/cards")
-    fun filterCards(
+    fun getUserCards(
         @PathVariable("user_id") userId: Int,
         @RequestParam("sortBy") sortBy: SortTypes
     ) = userService.sortCards(userId, sortBy)
 
-    @GetMapping("/{user_id}/top_3_cards")
-    fun getTop3Cards(@PathVariable("user_id") userId: Int) = userService.getTop3(userId)
+    @GetMapping("/{user_id}/top3_cards")
+    fun getUsersTop3CardsWithPrices(@PathVariable("user_id") userId: Int) = userService.getTop3(userId)
 
-    @GetMapping("/{user_id}/top_cards")
-    fun getTopCards(@PathVariable("user_id") userId: Int) = userService.getTop(userId)
+    @GetMapping("/{user_id}/cards_prices")
+    fun getUserCardsWithPrices(@PathVariable("user_id") userId: Int) = userService.getTop(userId)
 }

@@ -9,6 +9,11 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.server.ResponseStatusException
 import java.time.LocalDateTime
+import javax.persistence.EntityManager
+import javax.persistence.PersistenceContext
+import javax.persistence.criteria.CriteriaBuilder
+import javax.persistence.criteria.Predicate
+import javax.persistence.criteria.Root
 import kotlin.math.min
 
 @Service
@@ -19,6 +24,39 @@ class OrderService(
     val userRepository: UserRepository,
     val userCardRepository: UserCardRepository
 ) {
+
+    @PersistenceContext
+    val em: EntityManager? = null
+
+    fun search(side: Side?, userId: Int?, cardId: String?): List<SnapshotOrder> {
+
+        em?.also { em ->
+            val cb: CriteriaBuilder = em.criteriaBuilder
+            val cr = cb.createQuery(MasterOrder::class.java)
+            val root: Root<MasterOrder> = cr.from(MasterOrder::class.java)
+
+            val preds: MutableList<Predicate> = mutableListOf()
+
+            side?.also {
+                preds.add(cb.equal(root.get<Side>("side"), it))
+            }
+
+            userId?.also {
+                preds.add(cb.equal(root.get<Int>("user_id"), it))
+            }
+
+            cardId?.also {
+                preds.add(cb.equal(root.get<String>("card_id"), it))
+            }
+
+            cr.select(root)
+            cr.where(cb.and(*preds.toTypedArray()))
+
+            return em.createQuery(cr).resultList.mapNotNull { it.snapshotOrder }
+        }
+
+        return emptyList()
+    }
 
     fun getMaster(user: User, card: Card, side: Side) =
         masters.findAllByUserAndCardAndCompletedIsFalseAndSide(user, card, side).firstOrNull()
