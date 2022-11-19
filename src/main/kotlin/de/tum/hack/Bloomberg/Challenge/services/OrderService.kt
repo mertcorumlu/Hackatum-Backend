@@ -27,7 +27,7 @@ class OrderService(
     @PersistenceContext
     val em: EntityManager? = null
 
-    fun search(side: Side?, userId: Int?, cardId: String?): List<SnapshotOrder> {
+    fun search(side: Side?, userId: Int?, cardId: String?): List<MasterOrder> {
 
         em?.also { em ->
             val cb: CriteriaBuilder = em.criteriaBuilder
@@ -51,7 +51,11 @@ class OrderService(
             cr.select(root)
             cr.where(cb.and(*preds.toTypedArray()))
 
-            return em.createQuery(cr).resultList.mapNotNull { it.snapshotOrder }
+            return em.createQuery(cr).resultList.mapNotNull { m ->
+                m.quantity = m.snapshotOrder?.quantity ?: return@mapNotNull null
+                m.username = m.user.name
+                m
+            }
         }
 
         return emptyList()
