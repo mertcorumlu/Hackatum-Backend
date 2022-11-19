@@ -1,5 +1,6 @@
 package de.tum.hack.Bloomberg.Challenge.resources
 
+import de.tum.hack.Bloomberg.Challenge.api.Price
 import de.tum.hack.Bloomberg.Challenge.models.Card
 import de.tum.hack.Bloomberg.Challenge.services.CardsService
 import org.springframework.web.bind.annotation.*
@@ -23,4 +24,9 @@ class CardsResource(val cardsService: CardsService) {
 
     @PostMapping
     fun addCard(@RequestBody card: Card) = cardsService.add(card)
+
+    @GetMapping("/{id}/price")
+    fun getPrice(@PathVariable("id") card_id: String): Price {
+        return cardsService.getPrice(card_id)
+    }
 }

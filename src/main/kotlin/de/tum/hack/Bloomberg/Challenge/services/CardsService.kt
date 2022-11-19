@@ -1,11 +1,13 @@
 package de.tum.hack.Bloomberg.Challenge.services
 
 import de.tum.hack.Bloomberg.Challenge.api.BuySellOrdersResponse
+import de.tum.hack.Bloomberg.Challenge.api.Price
 import de.tum.hack.Bloomberg.Challenge.models.Card
 import de.tum.hack.Bloomberg.Challenge.models.MasterOrder
 import de.tum.hack.Bloomberg.Challenge.models.Side
 import de.tum.hack.Bloomberg.Challenge.models.SnapshotOrder
 import de.tum.hack.Bloomberg.Challenge.repositories.CardRepository
+import de.tum.hack.Bloomberg.Challenge.repositories.MasterOrderRepository
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
@@ -18,7 +20,10 @@ import javax.persistence.criteria.Root
 
 
 @Service
-class CardsService(val cardRepository: CardRepository) {
+class CardsService(
+    val cardRepository: CardRepository,
+    val masterOrderRepository: MasterOrderRepository
+) {
 
     @PersistenceContext
     val em: EntityManager? = null
@@ -48,6 +53,13 @@ class CardsService(val cardRepository: CardRepository) {
 
     fun find(card_id: String): Card {
         return cardRepository.findByCardId(card_id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+    }
+
+    fun getPrice(card_id: String): Price {
+        val card = find(card_id)
+        return Price(
+            price = masterOrderRepository.findAllByCompletedIsFalseAndSideAndCard(Side.SELL, card).minByOrNull { it.price }?.price
+        )
     }
 
     fun getOrders(card_id: String): BuySellOrdersResponse {
