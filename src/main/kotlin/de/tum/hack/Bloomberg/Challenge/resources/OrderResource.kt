@@ -17,7 +17,7 @@ class OrderResource(
 
     @PostMapping("/")
     fun addOrder(@RequestBody order: OrderTO) {
-        val user = userService.signIn(order.username, order.password)
+        val user = userService.getUser(order.username)
         val card = cardsService.find(order.cardId)
 
         ordersService.add(user, card, order)
@@ -25,7 +25,7 @@ class OrderResource(
 
     @DeleteMapping("/")
     fun delOrder(@RequestBody order: OrderTO) {
-        val user = userService.signIn(order.username, order.password)
+        val user = userService.getUser(order.username)
         val card = cardsService.find(order.cardId)
 
         ordersService.del(user, card, order)

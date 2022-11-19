@@ -1,6 +1,5 @@
 package de.tum.hack.Bloomberg.Challenge.services
 
-import de.tum.hack.Bloomberg.Challenge.api.FilterSnapshotsResponse
 import de.tum.hack.Bloomberg.Challenge.api.OrderTO
 import de.tum.hack.Bloomberg.Challenge.models.*
 import de.tum.hack.Bloomberg.Challenge.repositories.*
@@ -58,11 +57,11 @@ class OrderService(
         return emptyList()
     }
 
-    fun getMaster(user: User, card: Card, side: Side) =
-        masters.findAllByUserAndCardAndCompletedIsFalseAndSide(user, card, side).firstOrNull()
+    fun getMaster(user: User, card: Card, side: Side, price: Double) =
+        masters.findAllByUserAndCardAndCompletedIsFalseAndSideAndPrice(user, card, side, price).firstOrNull()
 
     fun createIfNull(user: User, card: Card, order: OrderTO): Pair<MasterOrder, Boolean> {
-        var master = getMaster(user, card, side = order.side)
+        var master = getMaster(user, card, side = order.side, price = order.price)
 
         if (master != null) { return master to true }
 
@@ -115,7 +114,7 @@ class OrderService(
 
     @Transactional
     fun del(user: User, card: Card, order: OrderTO) {
-        val master = getMaster(user, card, side = order.side)
+        val master = getMaster(user, card, side = order.side, price = order.price)
         val snapshot = master?.snapshotOrder ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST)
 
         snapshot.quantity -= order.quantity

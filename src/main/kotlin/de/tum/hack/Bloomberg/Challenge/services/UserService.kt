@@ -1,8 +1,6 @@
 package de.tum.hack.Bloomberg.Challenge.services
 
-import de.tum.hack.Bloomberg.Challenge.api.FilterSortUserCardResponse
 import de.tum.hack.Bloomberg.Challenge.api.SortTypes
-import de.tum.hack.Bloomberg.Challenge.models.Card
 import de.tum.hack.Bloomberg.Challenge.models.Side
 import de.tum.hack.Bloomberg.Challenge.models.User
 import de.tum.hack.Bloomberg.Challenge.models.UserCard
@@ -24,6 +22,12 @@ class UserService(
     val masterOrderRepository: MasterOrderRepository,
     val userCardRepository: UserCardRepository
     ) {
+
+    fun getUser(username: String): User {
+        return userRepository.findByName(username)
+            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "No user found")
+    }
+
     fun signIn(username: String, password: String): User {
         return userRepository.findByNameAndPassword(username, password)
             ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "No user found")
