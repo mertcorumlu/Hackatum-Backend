@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
-@Table(name = "MasterOrders")
+@Table(name = "master_orders")
 data class MasterOrder (
     @Id
     @Column(name = "id", nullable = false)
@@ -21,7 +21,8 @@ data class MasterOrder (
     var price: Double,
 
     @Column(name = "side", nullable = false)
-    var side: Boolean,
+    @Enumerated(EnumType.ORDINAL)
+    var side: Side,
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
@@ -34,5 +35,8 @@ data class MasterOrder (
     var updated: LocalDateTime? = null,
 
     @Column(name = "completed")
-    var completed: Boolean
+    var completed: Boolean,
+
+    @OneToOne(mappedBy = "masterOrder")
+    var snapshotOrder: SnapshotOrder? = null
 )

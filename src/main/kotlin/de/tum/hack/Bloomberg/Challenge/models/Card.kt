@@ -3,10 +3,11 @@ package de.tum.hack.Bloomberg.Challenge.models
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Id
+import javax.persistence.OneToMany
 import javax.persistence.Table
 
 @Entity
-@Table(name = "Cards")
+@Table(name = "cards")
 data class Card (
     @Id
     @Column(name = "id", nullable = false)
@@ -23,4 +24,7 @@ data class Card (
 
     @Column(name = "image_url", nullable = false)
     var imageUrl: String,
+
+    @OneToMany(mappedBy = "card")
+    var masterOrders: List<MasterOrder> = emptyList()
 )

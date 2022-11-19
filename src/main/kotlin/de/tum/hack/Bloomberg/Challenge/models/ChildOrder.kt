@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
-@Table(name = "ChildOrders")
+@Table(name = "child_orders")
 data class ChildOrder (
     @Id
     @Column(name = "id", nullable = false)

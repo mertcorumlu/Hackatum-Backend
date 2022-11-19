@@ -4,7 +4,7 @@ import java.io.Serializable
 import javax.persistence.*
 
 @Entity
-@Table(name = "UserCards")
+@Table(name = "user_cards")
 @IdClass(UserCardId::class)
 data class UserCard (
 

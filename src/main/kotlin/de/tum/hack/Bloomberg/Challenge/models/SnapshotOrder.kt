@@ -3,7 +3,7 @@ package de.tum.hack.Bloomberg.Challenge.models
 import javax.persistence.*
 
 @Entity
-@Table(name = "SnapshotOrders")
+@Table(name = "snapshot_orders")
 data class SnapshotOrder (
     @Id
     @Column(name = "id", nullable = false)

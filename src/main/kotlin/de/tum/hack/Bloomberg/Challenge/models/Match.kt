@@ -3,7 +3,7 @@ package de.tum.hack.Bloomberg.Challenge.models
 import javax.persistence.*
 
 @Entity
-@Table(name = "Matches")
+@Table(name = "matches")
 data class Match (
     @Id
     @Column(name = "id", nullable = false)
