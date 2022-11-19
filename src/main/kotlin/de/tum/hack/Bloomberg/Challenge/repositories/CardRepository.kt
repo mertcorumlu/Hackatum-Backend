@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query
 interface CardRepository : JpaRepository<Card, Int> {
     fun findByCardId(card_id: String): Card?
 
-    fun findTop5ByCardIdInListAndOrderByNameAsc(list: List<Int>): List<Card>
+    fun findTop5ByCardIdInListAndOrderByNameAsc(list: List<String>): List<Card>
 
-    fun findAllByCardIdInListAndOrderByRarity(list: List<Int>): List<Card>
+    fun findAllByCardIdInListAndOrderByRarity(list: List<String>): List<Card>
 }

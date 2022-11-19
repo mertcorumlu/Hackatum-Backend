@@ -29,10 +29,10 @@ class UserCardService(val userCardRepository: UserCardRepository, val cardReposi
         return FilterSortUserCardResponse(cards, cards.size)
     }
 
-    private fun getCardIds(userId: Int): List<Int> {
-        val cardIds = arrayListOf<Int>()
+    private fun getCardIds(userId: Int): List<String> {
+        val cardIds = arrayListOf<String>()
         userCardRepository.findAllCardByUserId(userId).forEach { userCard: UserCard ->
-            val id = userCard.user?.id
+            val id = userCard.user.name
             if (id != null) {
                 cardIds.add(id)
             }

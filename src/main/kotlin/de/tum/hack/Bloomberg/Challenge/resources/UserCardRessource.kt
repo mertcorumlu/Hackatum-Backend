@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController
 class UserCardRessource(val userCardService: UserCardService) {
 
     @GetMapping("/{user_id}/cards")
-    fun filterCards(@PathVariable("user_id") userId: String, @RequestParam("sortBy") sortBy: SortTypes) = userCardService.sortCards(userId, sortBy)
+    fun filterCards(@PathVariable("user_id") userId: Int, @RequestParam("sortBy") sortBy: SortTypes) = userCardService.sortCards(userId, sortBy)
 
     @GetMapping("/{user_id}/top_cards")
-    fun getTopCards(@PathVariable("user_id") userId: String) = userCardService.getTop(userId)
+    fun getTopCards(@PathVariable("user_id") userId: Int) = userCardService.getTop(userId)
 }
