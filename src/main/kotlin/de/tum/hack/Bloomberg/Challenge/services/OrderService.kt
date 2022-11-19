@@ -3,9 +3,7 @@ package de.tum.hack.Bloomberg.Challenge.services
 import de.tum.hack.Bloomberg.Challenge.api.FilterSnapshotsResponse
 import de.tum.hack.Bloomberg.Challenge.api.OrderTO
 import de.tum.hack.Bloomberg.Challenge.models.*
-import de.tum.hack.Bloomberg.Challenge.repositories.MasterOrderRepository
-import de.tum.hack.Bloomberg.Challenge.repositories.MatchRepository
-import de.tum.hack.Bloomberg.Challenge.repositories.SnapshotOrderRepository
+import de.tum.hack.Bloomberg.Challenge.repositories.*
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -17,7 +15,9 @@ import kotlin.math.min
 class OrderService(
     var matches: MatchRepository,
     val masters: MasterOrderRepository,
-    val snapshots: SnapshotOrderRepository
+    val snapshots: SnapshotOrderRepository,
+    val userRepository: UserRepository,
+    val userCardRepository: UserCardRepository
 ) {
 
     fun getMaster(user: User, card: Card, side: Side) =
@@ -54,6 +54,10 @@ class OrderService(
 
     @Transactional
     fun add(user: User, card: Card, order: OrderTO) {
+
+        if (user.balance < order.quantity * order.price)
+            throw ResponseStatusException(HttpStatus.NOT_ACCEPTABLE)
+
         val pair = createIfNull(user, card, order)
 
         val master = pair.first
@@ -116,12 +120,44 @@ class OrderService(
         var ret = true.xor(reverse)
 
         val quant = min(seller.quantity, this.quantity)
+        val price = seller.masterOrder.price
+
+        // balance update
+        seller.masterOrder.user.balance += quant * price
+        this.user.balance -= quant * price
+
+        userRepository.save(seller.masterOrder.user)
+        userRepository.save(this.user)
+
+        val card = this.card
+
+        var buyerCard = userCardRepository.findFirstByUserAndCard(this.user, card)
+        val sellerCard = userCardRepository.findFirstByUserAndCard(seller.masterOrder.user, card)
+
+        if (sellerCard == null || sellerCard.count < quant)
+            throw ResponseStatusException(HttpStatus.NOT_ACCEPTABLE)
+
+        sellerCard.count -= quant
+
+        if (sellerCard.count == 0) {
+            userCardRepository.delete(sellerCard)
+        } else {
+            userCardRepository.save(sellerCard)
+        }
+
+        if (buyerCard == null) {
+            buyerCard = UserCard(user = this.user, card = card, count = quant)
+        } else {
+            buyerCard.count += quant
+        }
+
+        userCardRepository.save(buyerCard)
 
         val match = Match(
             buyer = this,
             seller = seller.masterOrder,
             quantity = quant,
-            price = seller.masterOrder.price
+            price = price
         )
         matches.saveAndFlush(match)
 
