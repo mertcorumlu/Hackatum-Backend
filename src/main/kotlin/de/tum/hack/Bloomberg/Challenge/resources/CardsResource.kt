@@ -36,6 +36,6 @@ class CardsResource(val cardsService: CardsService) {
         cardsService.buildRegressionModelResponse(card_id)?.also {
             return it
         }
-        return PlotResponse(emptyList(), emptyList())
+        return PlotResponse(emptyList(), emptyList(), emptyList())
     }
 }

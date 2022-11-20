@@ -127,11 +127,13 @@ class CardsService(
     fun generatePlotHistory(lg: (Int) -> Double, data: List<MasterOrder>, startingDate: LocalDateTime): PlotResponse {
         val xs = mutableListOf<Int>()
         val ys = mutableListOf<Double>()
+        val vals = mutableListOf<Double>()
         data.forEach() {
             val x = Duration.between(startingDate, it.updated).toDays().toInt()
             xs.add(x)
             ys.add(lg(x))
+            vals.add(it.price)
         }
-        return PlotResponse(xs, ys)
+        return PlotResponse(xs, ys, vals)
     }
 }
