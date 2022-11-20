@@ -54,7 +54,9 @@ class UserService(
     fun getUserCardCount(userId: Int, cardId: String): Count {
         val user = userRepository.findByIdOrNull(userId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
         val card = cardRepository.findByCardId(cardId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
-        return Count(count = userCardRepository.findFirstByUserAndCard(user, card)?.count ?: 0)
+        val userCardCount = userCardRepository.findFirstByUserAndCard(user, card)?.count ?: 0
+        val sellerCount = masterOrderRepository.findAllByUserAndCardAndCompletedIsFalseAndSide(user, card, Side.SELL).mapNotNull { it.snapshotOrder?.quantity }.sum()
+        return Count(count = if (userCardCount > 0) userCardCount - sellerCount else 0)
     }
 
     fun getTop(userId: Int): List<Pair<UserCard, Double>> {
