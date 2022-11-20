@@ -107,7 +107,7 @@ class CardsService(
         }
 
         data.forEach { entry ->
-            xs.add(Duration.between(firstDate, entry.updated).toDays().toInt())
+            xs.add(Duration.between(firstDate, entry.updated).toSeconds().toInt())
             ys.add(entry.price)
         }
 

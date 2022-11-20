@@ -96,15 +96,12 @@ class OrderService(
     @Transactional
     fun add(user: User, card: Card, order: OrderTO) {
 
-        if (user.balance < order.quantity * order.price)
+        if (order.side == Side.BUY && user.balance < order.quantity * order.price)
             throw ResponseStatusException(HttpStatus.NOT_ACCEPTABLE)
 
         val pair = createIfNull(user, card, order)
 
         val master = pair.first
-
-        if (master.user.balance < order.price * order.quantity)
-            throw ResponseStatusException(HttpStatus.NOT_ACCEPTABLE)
 
         if (order.side == Side.BUY) {
             master.user.balance -= order.price * order.quantity
