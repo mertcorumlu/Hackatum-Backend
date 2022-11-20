@@ -145,16 +145,16 @@ class OrderService(
 
         if (snapshot.quantity < 0) { throw ResponseStatusException(HttpStatus.BAD_REQUEST) }
 
+        if (order.side == Side.BUY) {
+            master.user.balance += order.price * order.price
+            userRepository.saveAndFlush(master.user)
+        }
+
         if (snapshot.quantity == 0) {
             master.completed = true
             masters.saveAndFlush(master)
             snapshots.delete(snapshot)
             return
-        }
-
-        if (order.side == Side.BUY) {
-            master.user.balance += order.price * order.price
-            userRepository.saveAndFlush(master.user)
         }
 
         master.quantity -= order.quantity
