@@ -32,10 +32,10 @@ class CardsResource(val cardsService: CardsService) {
     }
 
     @GetMapping("/{id}/lg")
-    fun getLG(@PathVariable("id") card_id: String, @RequestParam(value = "days", required=false) days: Int? = null): PlotResponse {
+    fun getLG(@PathVariable("id") card_id: String, @RequestParam(value = "days", required=false) days: Int? = null): List<PlotResponse> {
         cardsService.buildRegressionModelResponse(card_id, days)?.also {
             return it
         }
-        return PlotResponse(emptyList(), emptyList(), emptyList())
+        return emptyList()
     }
 }

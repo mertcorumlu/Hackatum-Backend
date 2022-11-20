@@ -94,7 +94,7 @@ class CardsService(
         return cardRepository.findAllTransactionsOfCard(cardId)
     }
 
-    fun buildRegressionModelResponse(cardId: String, days: Int?): PlotResponse? {
+    fun buildRegressionModelResponse(cardId: String, days: Int?): List<PlotResponse>? {
         val data = getTransactionHistory(cardId)
         val xs = mutableListOf<Int>()
         val ys = mutableListOf<Double>()
@@ -124,32 +124,27 @@ class CardsService(
         return generatePlotHistory(lg, data, firstDate, days)
     }
 
-    fun generatePlotHistory(lg: (Int) -> Double, data: List<MasterOrder>, startingDate: LocalDateTime, days: Int?): PlotResponse {
-        val xs = mutableListOf<Int>()
-        val ys = mutableListOf<Double>()
-        val vals = mutableListOf<Double>()
+    fun generatePlotHistory(lg: (Int) -> Double, data: List<MasterOrder>, startingDate: LocalDateTime, days: Int?): List<PlotResponse> {
+        val list: MutableList<PlotResponse> = mutableListOf()
         data.forEach() {
             val x = Duration.between(startingDate, it.updated).toDays().toInt()
-            xs.add(x)
-            ys.add(lg(x))
-            vals.add(it.price)
+            list.add(PlotResponse(x, lg(x), it.price))
         }
 
-        days ?: return PlotResponse(xs, ys, vals)
+        days ?: return list
 
         var last: Int
         try {
-            last = xs.last()
+            last = list.last().x
         } catch (e: NoSuchElementException) {
-            return PlotResponse(xs, ys, vals)
+            return list
         }
         ++last
         for (i in 0 until days) {
-            xs.add(last)
-            ys.add(lg(last))
+            list.add(PlotResponse(last, lg(last), null))
             ++last
         }
 
-        return PlotResponse(xs, ys, vals)
+        return list
     }
 }
