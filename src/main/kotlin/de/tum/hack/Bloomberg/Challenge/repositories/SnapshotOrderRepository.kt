@@ -10,7 +10,7 @@ interface SnapshotOrderRepository : JpaRepository<SnapshotOrder, Int> {
     @Query("""
         select s from SnapshotOrder s 
         where s.masterOrder.card.cardId = :cardId and s.masterOrder.user.id <> :user_id and
-        s.masterOrder.price >= :price and s.masterOrder.side = 'BUY' 
+        s.masterOrder.price >= :price and s.masterOrder.side = 0
         order by s.masterOrder.price
         """)
     fun findBuyersForSeller(cardId: String, user_id: Int, price: Double): List<SnapshotOrder>
@@ -18,7 +18,7 @@ interface SnapshotOrderRepository : JpaRepository<SnapshotOrder, Int> {
     @Query("""
         select s from SnapshotOrder s 
         where s.masterOrder.card.cardId = :cardId and s.masterOrder.user.id <> :user_id and
-        s.masterOrder.price <= :price and s.masterOrder.side = 'SELL'  
+        s.masterOrder.price <= :price and s.masterOrder.side = 1 
         order by s.masterOrder.price desc
         """)
     fun findSellersForBuyer(cardId: String, user_id: Int, price: Double): List<SnapshotOrder>

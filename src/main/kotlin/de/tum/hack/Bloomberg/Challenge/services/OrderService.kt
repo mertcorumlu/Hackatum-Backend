@@ -164,6 +164,8 @@ class OrderService(
         if (masterOrder.side == Side.BUY) {
             val sellers = snapshots.findSellersForBuyer(masterOrder.card.cardId, masterOrder.user.id!!, masterOrder.price)
 
+            sellers.forEach { print(it.id) }
+
             sellers.forEach { seller ->
                 if(!masterOrder.buy(seller, false))
                     return@forEach
