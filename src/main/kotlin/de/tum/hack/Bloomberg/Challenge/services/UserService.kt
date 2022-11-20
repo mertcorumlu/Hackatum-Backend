@@ -63,7 +63,9 @@ class UserService(
         val userCards = userCardRepository.findAllByUserId(userId)
 
         return userCards.map { userCard ->
-            return@map masterOrderRepository.findAllByCompletedIsFalseAndSideAndCard(Side.SELL, userCard.card).minByOrNull { it.price }?.price?.let {
+            userCard.count = getUserCardCount(userId, userCard.card.cardId).count
+            return@map masterOrderRepository.findAllByCompletedIsFalseAndSideAndCard(Side.SELL, userCard.card)
+                .minByOrNull { it.price }?.price?.let {
                 userCard to it
             } ?: (userCard to 0.0)
         }
