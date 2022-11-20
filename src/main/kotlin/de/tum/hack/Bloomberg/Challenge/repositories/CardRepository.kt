@@ -1,6 +1,7 @@
 package de.tum.hack.Bloomberg.Challenge.repositories;
 
 import de.tum.hack.Bloomberg.Challenge.models.Card
+import de.tum.hack.Bloomberg.Challenge.models.MasterOrder
 import de.tum.hack.Bloomberg.Challenge.models.UserCard
 import org.springframework.data.domain.Sort
 import org.springframework.data.jpa.repository.JpaRepository
@@ -20,4 +21,11 @@ interface CardRepository : JpaRepository<Card, Int> {
         order by u.card.rarity
     """)
     fun findAllByUserOrderByCardRarity(user_id: Int): List<UserCard>
+
+    @Query("""
+        select m from MasterOrder m 
+        where m.card.cardId = :card_id and m.completed = true
+        order by m.updated desc
+    """)
+    fun findAllTransactionsOfCard(card_id: String): List<MasterOrder>
 }

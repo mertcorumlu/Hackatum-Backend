@@ -2,21 +2,22 @@ package de.tum.hack.Bloomberg.Challenge.services
 
 import de.tum.hack.Bloomberg.Challenge.api.BuySellOrdersResponse
 import de.tum.hack.Bloomberg.Challenge.api.Price
+import de.tum.hack.Bloomberg.Challenge.api.PlotResponse
 import de.tum.hack.Bloomberg.Challenge.models.Card
 import de.tum.hack.Bloomberg.Challenge.models.MasterOrder
 import de.tum.hack.Bloomberg.Challenge.models.Side
-import de.tum.hack.Bloomberg.Challenge.models.SnapshotOrder
 import de.tum.hack.Bloomberg.Challenge.repositories.CardRepository
 import de.tum.hack.Bloomberg.Challenge.repositories.MasterOrderRepository
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
+import java.time.Duration
+import java.time.LocalDateTime
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
 import javax.persistence.criteria.CriteriaBuilder
 import javax.persistence.criteria.Root
+import kotlin.math.pow
 
 
 @Service
@@ -89,4 +90,48 @@ class CardsService(
         cardRepository.save(card)
     }
 
+    fun getTransactionHistory(cardId: String): List<MasterOrder> {
+        return cardRepository.findAllTransactionsOfCard(cardId)
+    }
+
+    fun buildRegressionModelResponse(cardId: String): PlotResponse? {
+        val data = getTransactionHistory(cardId)
+        val xs = mutableListOf<Int>()
+        val ys = mutableListOf<Double>()
+
+        var firstDate: LocalDateTime
+        try {
+            firstDate = data.first().updated ?: return null
+        } catch (e: NoSuchElementException) {
+            return null
+        }
+
+        data.forEach { entry ->
+            xs.add(Duration.between(firstDate, entry.updated).toDays().toInt())
+            ys.add(entry.price)
+        }
+
+        val variance = xs.sumOf { x -> (x - xs.average()).pow(2) }
+
+        val covariance = xs.zip(ys) { x, y -> (x - xs.average()) * (y - ys.average())}.sum()
+
+        val slope = covariance / variance
+
+        val yIntercept = ys.average() - slope * xs.average()
+
+        val lg = { independentVariable: Int -> slope * independentVariable + yIntercept }
+
+        return generatePlotHistory(lg, data, firstDate)
+    }
+
+    fun generatePlotHistory(lg: (Int) -> Double, data: List<MasterOrder>, startingDate: LocalDateTime): PlotResponse {
+        val xs = mutableListOf<Int>()
+        val ys = mutableListOf<Double>()
+        data.forEach() {
+            val x = Duration.between(startingDate, it.updated).toDays().toInt()
+            xs.add(x)
+            ys.add(lg(x))
+        }
+        return PlotResponse(xs, ys)
+    }
 }
