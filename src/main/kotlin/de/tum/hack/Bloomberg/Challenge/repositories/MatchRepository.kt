@@ -1,6 +1,7 @@
 package de.tum.hack.Bloomberg.Challenge.repositories;
 
 import de.tum.hack.Bloomberg.Challenge.models.Match
+import de.tum.hack.Bloomberg.Challenge.models.Side
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 
@@ -19,4 +20,6 @@ interface MatchRepository : JpaRepository<Match, Int> {
             order by m.price
         """)
         fun filterMatchesByCardId(cardId: String): List<Match>
+
+        fun filterMatchesBySide(side: Side): List<Match>
 }
