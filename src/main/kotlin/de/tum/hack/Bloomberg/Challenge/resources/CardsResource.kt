@@ -26,17 +26,16 @@ class CardsResource(val cardsService: CardsService) {
     @PostMapping
     fun addCard(@RequestBody card: Card) = cardsService.add(card)
 
-<<<<<<< Updated upstream
     @GetMapping("/{id}/price")
     fun getPrice(@PathVariable("id") card_id: String): Price {
         return cardsService.getPrice(card_id)
-=======
+    }
+
     @GetMapping("/{id}/lg")
     fun getLG(@PathVariable("id") card_id: String): PlotResponse {
         cardsService.buildRegressionModelResponse(card_id)?.also {
             return it
         }
         return PlotResponse(emptyList(), emptyList())
->>>>>>> Stashed changes
     }
 }
