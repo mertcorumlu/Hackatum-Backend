@@ -111,7 +111,10 @@ class OrderService(
             userRepository.saveAndFlush(master.user)
         } else {
             val sellingCard = masters.findAllByUserAndCardAndCompletedIsFalseAndSide(user, card, Side.SELL)
-            val totalSelling = sellingCard.mapNotNull { it.snapshotOrder?.quantity }.sum()
+            var totalSelling = sellingCard.mapNotNull { it.snapshotOrder?.quantity }.sum()
+            if (!pair.second) {
+                totalSelling -= order.quantity
+            }
             val totalHave = userCardRepository.findFirstByUserAndCard(user, card)?.count ?: 0
 
             if (order.quantity > totalHave - totalSelling)
