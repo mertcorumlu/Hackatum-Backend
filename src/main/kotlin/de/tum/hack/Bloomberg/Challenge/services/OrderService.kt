@@ -106,8 +106,19 @@ class OrderService(
         if (master.user.balance < order.price * order.quantity)
             throw ResponseStatusException(HttpStatus.NOT_ACCEPTABLE)
 
-        master.user.balance -= order.price * order.quantity
-        userRepository.saveAndFlush(master.user)
+        if (order.side == Side.BUY) {
+            master.user.balance -= order.price * order.quantity
+            userRepository.saveAndFlush(master.user)
+        } else {
+            val sellingCard = masters.findAllByUserAndCardAndCompletedIsFalseAndSide(user, card, Side.SELL)
+            val totalSelling = sellingCard.mapNotNull { it.snapshotOrder?.quantity }.sum()
+            val totalHave = userCardRepository.findFirstByUserAndCard(user, card)?.count ?: 0
+
+            if (order.quantity > totalHave - totalSelling)
+                throw ResponseStatusException(HttpStatus.NOT_ACCEPTABLE)
+        }
+
+
 
         if (pair.second) {
             master.quantity += order.quantity
@@ -138,10 +149,13 @@ class OrderService(
             return
         }
 
-        master.quantity -= order.quantity
-        master.user.balance += order.price * order.price
+        if (order.side == Side.BUY) {
+            master.user.balance += order.price * order.price
+            userRepository.saveAndFlush(master.user)
+        }
 
-        userRepository.saveAndFlush(master.user)
+        master.quantity -= order.quantity
+
         snapshots.saveAndFlush(snapshot)
         masters.saveAndFlush(master)
     }

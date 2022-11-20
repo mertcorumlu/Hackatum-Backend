@@ -8,5 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface MasterOrderRepository : JpaRepository<MasterOrder, Int> {
     fun findAllByUserAndCardAndCompletedIsFalseAndSideAndPrice(user: User, card: Card, side: Side, price: Double): List<MasterOrder>
+    fun findAllByUserAndCardAndCompletedIsFalseAndSide(user: User, card: Card, side: Side): List<MasterOrder>
     fun findAllByCompletedIsFalseAndSideAndCard(side: Side, card: Card): List<MasterOrder>
 }
