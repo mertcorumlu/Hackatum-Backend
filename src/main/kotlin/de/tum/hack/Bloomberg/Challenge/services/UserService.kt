@@ -9,6 +9,7 @@ import de.tum.hack.Bloomberg.Challenge.repositories.CardRepository
 import de.tum.hack.Bloomberg.Challenge.repositories.MasterOrderRepository
 import de.tum.hack.Bloomberg.Challenge.repositories.UserCardRepository
 import de.tum.hack.Bloomberg.Challenge.repositories.UserRepository
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
@@ -51,7 +52,9 @@ class UserService(
     }
 
     fun getUserCardCount(userId: Int, cardId: String): Count {
-        return Count(count = userCardRepository.findFirstByUserIdAndCardId(userId, cardId)?.count)
+        val user = userRepository.findByIdOrNull(userId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+        val card = cardRepository.findByCardId(cardId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+        return Count(count = userCardRepository.findFirstByUserAndCard(user, card)?.count ?: 0)
     }
 
     fun getTop(userId: Int): List<Pair<UserCard, Double>> {
