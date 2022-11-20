@@ -20,7 +20,7 @@ class MatchResource(
         @RequestParam("cardId", required = false) cardId: String? = null,
         @RequestParam("side", required = false) side: Side? = null
     ): List<Match> {
-        return matchService.search(userId, cardId)
+        return matchService.search(userId, cardId, side)
     }
 
 }

@@ -20,6 +20,4 @@ interface MatchRepository : JpaRepository<Match, Int> {
             order by m.price
         """)
         fun filterMatchesByCardId(cardId: String): List<Match>
-
-        fun filterMatchesBySide(side: Side): List<Match>
 }
